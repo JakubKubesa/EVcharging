@@ -11,7 +11,7 @@ export const registerUser = async (user) => {
     body: JSON.stringify({
       username: user.username,
       email: user.email,
-      passwordHash: user.password, // musí odpovídat jménu v backendu
+      passwordHash: user.password, 
       role: "USER"
     }),
   });
@@ -41,6 +41,17 @@ export const getUsers = async () => {
   return await response.json();
 };
 
+
+export const deleteUser = async (userId) => {
+  const response = await fetch(`${USERS_URL}/${userId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Chyba při mazání uživatele");
+  }
+};
 
 
 export const addCar = async (userId, car) => {

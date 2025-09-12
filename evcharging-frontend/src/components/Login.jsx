@@ -14,7 +14,7 @@ function Login({ onLogin }) {
       loggedOrNewUser = await registerUser(form);
     }
 
-    // pokud je ADMIN → načti uživatele
+    // for admin
     if (loggedOrNewUser.role === "ADMIN") {
       const usersFromDb = await getUsers();
       onLogin(loggedOrNewUser, usersFromDb);

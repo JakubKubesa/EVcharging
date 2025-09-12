@@ -5,9 +5,9 @@ function CarsPanel({ user }) {
   const [selectedCarId, setSelectedCarId] = useState(null);
   const [newCarSpz, setNewCarSpz] = useState("");
   const [newCarBattery, setNewCarBattery] = useState("");
-  const [newCarModel, setNewCarModel] = useState(""); // <-- nový state
+  const [newCarModel, setNewCarModel] = useState(""); 
 
-  // Načtení aut aktuálního uživatele
+  // load car for user
   useEffect(() => {
     if (user?.id) {
       fetch(`http://localhost:8080/api/cars/user/${user.id}`)
@@ -17,7 +17,7 @@ function CarsPanel({ user }) {
     }
   }, [user]);
 
-  // Přidání auta
+  // add car
   const handleAddCar = () => {
     if (!newCarSpz || !newCarBattery || !newCarModel) return;
 
@@ -43,7 +43,7 @@ function CarsPanel({ user }) {
       .catch(err => console.error(err));
   };
 
-  // Mazání auta
+  // delete car
   const handleDeleteCar = (carId) => {
     fetch(`http://localhost:8080/api/cars/${carId}`, {
       method: "DELETE"

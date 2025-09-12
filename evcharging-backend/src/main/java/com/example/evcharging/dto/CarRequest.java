@@ -3,9 +3,9 @@ package com.example.evcharging.dto;
 public class CarRequest {
     private String spz;
     private int batteryCapacityKwh;
-    private String model; // <-- nový atribut
+    private String model;
 
-    public CarRequest() {} // prázdný konstruktor nutný pro Jackson
+    public CarRequest() {}
 
     public CarRequest(String spz, int batteryCapacityKwh, String model) {
         this.spz = spz;
@@ -13,7 +13,7 @@ public class CarRequest {
         this.model = model;
     }
 
-    // --- Gettery a settery ---
+
     public String getSpz() { return spz; }
     public void setSpz(String spz) { this.spz = spz; }
 

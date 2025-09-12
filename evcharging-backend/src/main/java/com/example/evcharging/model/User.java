@@ -3,7 +3,7 @@ package com.example.evcharging.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users") // lepší plural
+@Table(name = "users")
 public class User {
 
     @Id
@@ -21,10 +21,9 @@ public class User {
         USER, ADMIN
     }
 
-    // --- Konstruktor bez parametrů (nutný pro JPA i Jackson) ---
     public User() {}
 
-    // --- Konstruktor s parametry ---
+
     public User(String username, String email, String passwordHash, Role role) {
         this.username = username;
         this.email = email;
@@ -32,7 +31,7 @@ public class User {
         this.role = role;
     }
 
-    // --- Gettery a settery ---
+
 
     public Long getId() {
         return id;

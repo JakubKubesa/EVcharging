@@ -22,7 +22,7 @@ public class CarController {
         this.userRepository = userRepository;
     }
 
-    // přidání auta k uživateli
+    // add car to user
     @PostMapping("/add/{userId}")
     @CrossOrigin(origins = "http://localhost:3000")
     public Car addCar(@PathVariable Long userId, @RequestBody CarRequest carRequest) {
@@ -33,7 +33,6 @@ public class CarController {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // vytvoření Car i s modelem
         Car car = new Car(
                 carRequest.getSpz(),
                 carRequest.getBatteryCapacityKwh(),
@@ -47,14 +46,14 @@ public class CarController {
         return savedCar;
     }
 
-    // získání všech aut jednoho uživatele
+    // get all cars from the user
     @GetMapping("/user/{userId}")
     @CrossOrigin(origins = "http://localhost:3000")
     public List<Car> getCarsForUser(@PathVariable Long userId) {
         return carRepository.findByUserId(userId);
     }
 
-    // smazání auta
+    // delete car
     @DeleteMapping("/{carId}")
     @CrossOrigin(origins = "http://localhost:3000")
     public void deleteCar(@PathVariable Long carId) {

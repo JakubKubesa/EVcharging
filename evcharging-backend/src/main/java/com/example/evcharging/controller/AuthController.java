@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:3000") // povolí React frontend
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
     @Autowired
@@ -16,11 +16,11 @@ public class AuthController {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    // Registrace
+    // Registration
     @PostMapping("/register")
     public User register(@RequestBody User user) {
-        user.setRole(User.Role.USER); // vždy USER
-        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash())); // hash hesla
+        user.setRole(User.Role.USER);
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
         return userRepository.save(user);
     }
 
@@ -30,7 +30,7 @@ public class AuthController {
         User existingUser = userRepository.findByEmail(loginRequest.getEmail());
         if (existingUser != null &&
                 passwordEncoder.matches(loginRequest.getPasswordHash(), existingUser.getPasswordHash())) {
-            return existingUser; // vrátí usera (v reálu by se tu generoval JWT token)
+            return existingUser;
         }
         throw new RuntimeException("Invalid credentials");
     }

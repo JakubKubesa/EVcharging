@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CarsPanel from "./components/CarsPanel";
 import Login from "./components/Login";
+import Admin from "./components/Admin";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -25,19 +26,7 @@ function App() {
   }
 
   if (user.role === "ADMIN") {
-    return (
-      <div className="p-6">
-        <h1 className="text-2xl font-bold">Admin panel – {user.username}</h1>
-        <h2 className="mt-6 text-xl font-semibold">Všichni uživatelé:</h2>
-        <ul className="mt-2 list-disc list-inside">
-          {allUsers.map((u) => (
-            <li key={u.id}>
-              {u.username} ({u.email}) – {u.role}
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
+    return <Admin user={user} allUsers={allUsers} setAllUsers={setAllUsers} />;
   }
 }
 

@@ -17,19 +17,22 @@ public class Car {
     private String spz;
     private int batteryCapacityKwh;
 
+    private String model; // <-- nový atribut
+
     // konstruktory
     public Car() {}
 
-    public Car(User user, String spz, int batteryCapacityKwh) {
+    public Car(User user, String spz, int batteryCapacityKwh, String model) {
         this.user = user;
         this.spz = spz;
         this.batteryCapacityKwh = batteryCapacityKwh;
+        this.model = model;
     }
 
-    // V třídě Car přidej tento konstruktor
-    public Car(String spz, int batteryCapacityKwh) {
+    public Car(String spz, int batteryCapacityKwh, String model) {
         this.spz = spz;
         this.batteryCapacityKwh = batteryCapacityKwh;
+        this.model = model;
     }
 
     // get/set
@@ -44,4 +47,7 @@ public class Car {
 
     public int getBatteryCapacityKwh() { return batteryCapacityKwh; }
     public void setBatteryCapacityKwh(int batteryCapacityKwh) { this.batteryCapacityKwh = batteryCapacityKwh; }
+
+    public String getModel() { return model; }
+    public void setModel(String model) { this.model = model; }
 }

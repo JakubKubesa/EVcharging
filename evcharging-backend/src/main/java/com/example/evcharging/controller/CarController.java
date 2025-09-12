@@ -7,12 +7,11 @@ import com.example.evcharging.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 import com.example.evcharging.dto.CarRequest;
 
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/cars")
-@CrossOrigin(origins = "http://localhost:3000") // PŘIDEJ TUTO ANOTACI
+@CrossOrigin(origins = "http://localhost:3000")
 public class CarController {
 
     private final CarRepository carRepository;
@@ -27,13 +26,19 @@ public class CarController {
     @PostMapping("/add/{userId}")
     @CrossOrigin(origins = "http://localhost:3000")
     public Car addCar(@PathVariable Long userId, @RequestBody CarRequest carRequest) {
-        System.out.println("Received car request: " + carRequest.getSpz() + ", " + carRequest.getBatteryCapacityKwh());
+        System.out.println("Received car request: " + carRequest.getSpz() + ", "
+                + carRequest.getBatteryCapacityKwh() + ", " + carRequest.getModel());
         System.out.println("For user ID: " + userId);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Car car = new Car(carRequest.getSpz(), carRequest.getBatteryCapacityKwh());
+        // vytvoření Car i s modelem
+        Car car = new Car(
+                carRequest.getSpz(),
+                carRequest.getBatteryCapacityKwh(),
+                carRequest.getModel()
+        );
         car.setUser(user);
 
         Car savedCar = carRepository.save(car);

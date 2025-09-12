@@ -5,6 +5,7 @@ function CarsPanel({ user }) {
   const [selectedCarId, setSelectedCarId] = useState(null);
   const [newCarSpz, setNewCarSpz] = useState("");
   const [newCarBattery, setNewCarBattery] = useState("");
+  const [newCarModel, setNewCarModel] = useState(""); // <-- nový state
 
   // Načtení aut aktuálního uživatele
   useEffect(() => {
@@ -18,15 +19,15 @@ function CarsPanel({ user }) {
 
   // Přidání auta
   const handleAddCar = () => {
-    if (!newCarSpz || !newCarBattery) return;
+    if (!newCarSpz || !newCarBattery || !newCarModel) return;
 
-    // Posíláme DTO objekt
     fetch(`http://localhost:8080/api/cars/add/${user.id}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         spz: newCarSpz,
-        batteryCapacityKwh: parseInt(newCarBattery)
+        batteryCapacityKwh: parseInt(newCarBattery),
+        model: newCarModel
       })
     })
       .then(res => {
@@ -37,6 +38,7 @@ function CarsPanel({ user }) {
         setCars([...cars, car]);
         setNewCarSpz("");
         setNewCarBattery("");
+        setNewCarModel("");
       })
       .catch(err => console.error(err));
   };
@@ -54,7 +56,7 @@ function CarsPanel({ user }) {
     <div>
       <h2>Moje auta</h2>
 
-      {/* Výběr auta */}
+      {/* Choose car */}
       <div>
         <h4>Vyber auto</h4>
         {cars.length === 0 && <p>Nemáš zatím žádné auto</p>}
@@ -67,7 +69,7 @@ function CarsPanel({ user }) {
               onChange={() => setSelectedCarId(car.id)}
             />
             <span style={{ marginLeft: "8px" }}>
-              {car.spz} ({car.batteryCapacityKwh} kWh)
+              {car.spz} ({car.model}) — {car.batteryCapacityKwh} kWh
             </span>
             <button
               style={{ marginLeft: "12px" }}
@@ -79,7 +81,7 @@ function CarsPanel({ user }) {
         ))}
       </div>
 
-      {/* Přidání auta */}
+      {/* Add car*/}
       <div style={{ marginTop: "20px" }}>
         <h4>Přidat nové auto</h4>
         <input
@@ -87,6 +89,12 @@ function CarsPanel({ user }) {
           placeholder="SPZ"
           value={newCarSpz}
           onChange={e => setNewCarSpz(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Model auta"
+          value={newCarModel}
+          onChange={e => setNewCarModel(e.target.value)}
         />
         <input
           type="number"
@@ -97,7 +105,6 @@ function CarsPanel({ user }) {
         <button onClick={handleAddCar}>Přidat</button>
       </div>
 
-      {/* Zvolený výběr auta */}
       {selectedCarId && (
         <div style={{ marginTop: "20px" }}>
           <strong>Vybral jsi auto ID: {selectedCarId}</strong>

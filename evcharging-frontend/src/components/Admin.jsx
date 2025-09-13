@@ -10,7 +10,7 @@ function Admin({ user, allUsers, setAllUsers }) {
       await deleteUser(id);
       setAllUsers(allUsers.filter((u) => u.id !== id));
     } catch (err) {
-      console.error("Chyba při mazání uživatele:", err);
+      console.error("Delete user error:", err);
     }
   };
 
@@ -22,11 +22,11 @@ function Admin({ user, allUsers, setAllUsers }) {
         active: true
       };
       await addChargingStation(newStation);
-      alert("Nabíjecí stanice byla úspěšně přidána.");
+      alert("charging station added successfully");
       setStationName("");
       setStationPower("");
     } catch (err) {
-      console.error("Chyba při přidávání stanice:", err);
+      console.error("error when adding charging station:", err);
     }
   };
 
@@ -34,7 +34,7 @@ function Admin({ user, allUsers, setAllUsers }) {
     <div className="p-6">
       <h1 className="text-2xl font-bold">Admin panel – {user.username}</h1>
 
-      <h2 className="mt-6 text-xl font-semibold">Všichni uživatelé:</h2>
+      <h2 className="mt-6 text-xl font-semibold">All users:</h2>
       <ul className="mt-2 list-disc list-inside">
         {allUsers.map((u) => (
           <li key={u.id}>
@@ -43,7 +43,7 @@ function Admin({ user, allUsers, setAllUsers }) {
               className="ml-2 text-red-500"
               onClick={() => handleDeleteUser(u.id)}
             >
-              Smazat
+              Delete
             </button>
           </li>
         ))}
@@ -51,18 +51,18 @@ function Admin({ user, allUsers, setAllUsers }) {
 
       {/* add charging station */}
       <div className="mt-6">
-        <h2 className="text-xl font-semibold">Přidat parkovací místo (stanici):</h2>
+        <h2 className="text-xl font-semibold">Add parking spot (charging station):</h2>
         <div className="mt-2 flex gap-2">
           <input
             type="text"
-            placeholder="Název stanice"
+            placeholder="Charging station name"
             value={stationName}
             onChange={(e) => setStationName(e.target.value)}
             className="border p-2 rounded"
           />
           <input
             type="number"
-            placeholder="Výkon (kW)"
+            placeholder="Power (kW)"
             value={stationPower}
             onChange={(e) => setStationPower(e.target.value)}
             className="border p-2 rounded w-32"
@@ -71,7 +71,7 @@ function Admin({ user, allUsers, setAllUsers }) {
             onClick={handleAddStation}
             className="bg-blue-500 text-white px-4 py-2 rounded"
           >
-            Přidat
+            Add
           </button>
         </div>
       </div>

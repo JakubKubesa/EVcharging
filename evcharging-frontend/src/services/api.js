@@ -51,7 +51,7 @@ export const deleteUser = async (userId) => {
   });
 
   if (!response.ok) {
-    throw new Error("Chyba při mazání uživatele");
+    throw new Error("Delete user error");
   }
 };
 
@@ -69,7 +69,7 @@ export const addChargingStation = async (station) => {
   });
 
   if (!response.ok) {
-    throw new Error("Chyba při přidávání nabíjecí stanice");
+    throw new Error("Adding station error");
   }
 
   return await response.json();

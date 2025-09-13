@@ -19,7 +19,6 @@ function App() {
   if (user.role === "USER") {
     return (
       <div className="p-6">
-        <h1 className="text-2xl font-bold">Vítej, {user.username} 👋</h1>
         <CarsPanel user={user} />
       </div>
     );

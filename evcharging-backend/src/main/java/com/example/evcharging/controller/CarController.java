@@ -46,6 +46,15 @@ public class CarController {
         return savedCar;
     }
 
+    // get car by id
+    @GetMapping("/{carId}")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public Car getCarById(@PathVariable Long carId) {
+        return carRepository.findById(carId)
+                .orElseThrow(() -> new RuntimeException("Car not found"));
+    }
+
+
     // get all cars from the user
     @GetMapping("/user/{userId}")
     @CrossOrigin(origins = "http://localhost:3000")

@@ -14,7 +14,7 @@ function CarsPanel({ user }) {
       fetch(`http://localhost:8080/api/cars/user/${user.id}`)
         .then(res => res.json())
         .then(data => setCars(data))
-        .catch(err => console.error("Chyba při načítání aut:", err));
+        .catch(err => console.error("Loading car error:", err));
     }
   }, [user]);
 
@@ -32,7 +32,7 @@ function CarsPanel({ user }) {
       })
     })
       .then(res => {
-        if (!res.ok) throw new Error("Chyba při přidávání auta");
+        if (!res.ok) throw new Error("Adding car error");
         return res.json();
       })
       .then(car => {
@@ -50,17 +50,17 @@ function CarsPanel({ user }) {
       method: "DELETE"
     })
       .then(() => setCars(cars.filter(car => car.id !== carId)))
-      .catch(err => console.error("Chyba při mazání auta:", err));
+      .catch(err => console.error("Delete car error:", err));
   };
 
   return (
     <div>
-      <h2>Moje auta</h2>
+      <h2>My cars</h2>
 
       {/* Choose car */}
       <div>
-        <h4>Vyber auto</h4>
-        {cars.length === 0 && <p>Nemáš zatím žádné auto</p>}
+        <h4>Choose car</h4>
+        {cars.length === 0 && <p>You don't have a car yet.</p>}
         {cars.map(car => (
           <div key={car.id} style={{ marginBottom: "8px" }}>
             <input
@@ -76,7 +76,7 @@ function CarsPanel({ user }) {
               style={{ marginLeft: "12px" }}
               onClick={() => handleDeleteCar(car.id)}
             >
-              Smazat
+              Delete
             </button>
           </div>
         ))}
@@ -87,31 +87,31 @@ function CarsPanel({ user }) {
 
       {/* Add car*/}
       <div style={{ marginTop: "20px" }}>
-        <h4>Přidat nové auto</h4>
+        <h4>Add new car</h4>
         <input
           type="text"
-          placeholder="SPZ"
+          placeholder="Licence plate number"
           value={newCarSpz}
           onChange={e => setNewCarSpz(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Model auta"
+          placeholder="Car model"
           value={newCarModel}
           onChange={e => setNewCarModel(e.target.value)}
         />
         <input
           type="number"
-          placeholder="Kapacita baterie (kWh)"
+          placeholder="Battery capacity (kWh)"
           value={newCarBattery}
           onChange={e => setNewCarBattery(e.target.value)}
         />
-        <button onClick={handleAddCar}>Přidat</button>
+        <button onClick={handleAddCar}>Add</button>
       </div>
 
       {selectedCarId && (
         <div style={{ marginTop: "20px" }}>
-          <strong>Vybral jsi auto ID: {selectedCarId}</strong>
+          <strong>You choose car with ID: {selectedCarId}</strong>
         </div>
       )}
     </div>

@@ -1,6 +1,8 @@
 const API_URL = "http://localhost:8080/api/auth";
 const USERS_URL = "http://localhost:8080/api/users";
 const CAR_URL = "http://localhost:8080/api/cars";
+const STATIONS_URL = "http://localhost:8080/api/stations";
+
 
 export const registerUser = async (user) => {
   const response = await fetch("http://localhost:8080/api/auth/register", {
@@ -53,6 +55,27 @@ export const deleteUser = async (userId) => {
   }
 };
 
+//---
+
+export const addChargingStation = async (station) => {
+  const response = await fetch(STATIONS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: station.name,
+      powerKw: station.powerKw,
+      active: station.active ?? true
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error("Chyba při přidávání nabíjecí stanice");
+  }
+
+  return await response.json();
+};
+
+//---
 
 export const addCar = async (userId, car) => {
   const response = await fetch(`${CAR_URL}/add/${userId}`, {
@@ -62,7 +85,7 @@ export const addCar = async (userId, car) => {
   });
   return response.json();
 };
-
+ 
 export const getCarsForUser = async (userId) => {
   const response = await fetch(`${CAR_URL}/user/${userId}`);
   return response.json();

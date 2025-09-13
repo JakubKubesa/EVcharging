@@ -49,7 +49,7 @@ function Admin({ user, allUsers, setAllUsers }) {
         ))}
       </ul>
 
-      {/* Přidání nabíjecí stanice */}
+      {/* add charging station */}
       <div className="mt-6">
         <h2 className="text-xl font-semibold">Přidat parkovací místo (stanici):</h2>
         <div className="mt-2 flex gap-2">

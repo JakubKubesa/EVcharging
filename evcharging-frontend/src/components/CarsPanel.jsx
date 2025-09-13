@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Reservation from "./Reservation";
 
 function CarsPanel({ user }) {
   const [cars, setCars] = useState([]);
@@ -79,7 +80,10 @@ function CarsPanel({ user }) {
             </button>
           </div>
         ))}
+
+        {selectedCarId && <Reservation selectedCarId={selectedCarId} user={user} />}
       </div>
+
 
       {/* Add car*/}
       <div style={{ marginTop: "20px" }}>

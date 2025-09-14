@@ -9,11 +9,14 @@ function Reservation({ selectedCarId, user }) {
 
   // Load parking spot
   useEffect(() => {
-    fetch("http://localhost:8080/api/stations")
+    if (!startTime) return;
+
+    fetch(`http://localhost:8080/api/stations/available?startTime=${startTime}`)
       .then(res => res.json())
       .then(data => setStations(data))
-      .catch(err => console.error("Loading station error:", err));
-  }, []);
+      .catch(err => console.error("Loading available stations error:", err));
+  }, [startTime]);
+
 
   // Load car details
   useEffect(() => {
@@ -100,7 +103,15 @@ function Reservation({ selectedCarId, user }) {
       {!car && <p>Loading info about car...</p>}
 
       {car && (
-        <>
+        <> 
+          <div style={{ marginTop: "10px" }}>
+            <label>Charging start:</label>
+            <input
+              type="datetime-local"
+              value={startTime}
+              onChange={e => setStartTime(e.target.value)}
+            />
+          </div>
           <div>
             <label>Choose station:</label>
             <select
@@ -114,15 +125,6 @@ function Reservation({ selectedCarId, user }) {
                 </option>
               ))}
             </select>
-          </div>
-
-          <div style={{ marginTop: "10px" }}>
-            <label>Charging start:</label>
-            <input
-              type="datetime-local"
-              value={startTime}
-              onChange={e => setStartTime(e.target.value)}
-            />
           </div>
 
           <button style={{ marginTop: "10px" }} onClick={handleCreateReservation}>

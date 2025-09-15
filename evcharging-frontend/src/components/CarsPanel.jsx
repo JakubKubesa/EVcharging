@@ -93,18 +93,21 @@ function CarsPanel({ user }) {
           placeholder="Licence plate number"
           value={newCarSpz}
           onChange={e => setNewCarSpz(e.target.value)}
+          required
         />
         <input
           type="text"
           placeholder="Car model"
           value={newCarModel}
           onChange={e => setNewCarModel(e.target.value)}
+          required
         />
         <input
           type="number"
           placeholder="Battery capacity (kWh)"
           value={newCarBattery}
           onChange={e => setNewCarBattery(e.target.value)}
+          required
         />
         <button onClick={handleAddCar}>Add</button>
       </div>

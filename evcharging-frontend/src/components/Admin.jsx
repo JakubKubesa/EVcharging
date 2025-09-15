@@ -15,6 +15,11 @@ function Admin({ user, allUsers, setAllUsers }) {
   };
 
   const handleAddStation = async () => {
+    if (!stationName || !stationPower) {
+      alert("Please fill in all required fields");
+      return;
+    }
+  
     try {
       const newStation = {
         name: stationName,
@@ -29,6 +34,7 @@ function Admin({ user, allUsers, setAllUsers }) {
       console.error("error when adding charging station:", err);
     }
   };
+
 
   return (
     <div className="p-6">

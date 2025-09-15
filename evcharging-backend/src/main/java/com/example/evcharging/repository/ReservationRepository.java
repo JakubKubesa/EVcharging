@@ -14,4 +14,13 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "WHERE :startTime BETWEEN r.startTime AND r.endTime")
     List<Long> findStationIdsWithReservationsAt(@Param("startTime") LocalDateTime startTime);
 
+    @Query("SELECT r FROM Reservation r " +
+            "WHERE r.station.id = :stationId " +
+            "AND :startTime < r.endTime " +
+            "AND :endTime > r.startTime")
+    List<Reservation> findOverlappingReservations(
+            @Param("stationId") Long stationId,
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime
+    );
 }

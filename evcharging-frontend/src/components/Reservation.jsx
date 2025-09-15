@@ -6,8 +6,9 @@ function Reservation({ selectedCarId, user }) {
   const [startTime, setStartTime] = useState("");
   const [car, setCar] = useState(null);
   const [station, setStation] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  // Load parking spot
+  // Charging stations load
   useEffect(() => {
     if (!startTime) return;
 
@@ -17,8 +18,7 @@ function Reservation({ selectedCarId, user }) {
       .catch(err => console.error("Loading available stations error:", err));
   }, [startTime]);
 
-
-  // Load car details
+  // Cars load
   useEffect(() => {
     if (selectedCarId) {
       fetch(`http://localhost:8080/api/cars/${selectedCarId}`)
@@ -30,7 +30,7 @@ function Reservation({ selectedCarId, user }) {
     }
   }, [selectedCarId]);
 
-  // Load parking spot details
+  // choosed charging station settings
   useEffect(() => {
     if (selectedStationId) {
       const found = stations.find(s => s.id === selectedStationId);
@@ -40,61 +40,72 @@ function Reservation({ selectedCarId, user }) {
     }
   }, [selectedStationId, stations]);
 
-  // calculation end charging time
+  // Calculation of end time
   const calcEndTime = () => {
     if (!car || !station || !startTime) return null;
-  
+
     const battery = car.batteryCapacityKwh;
     const power = station.powerKw || 1;
     const chargeTimeMinutes = Math.ceil((battery / power) * 60) + 5;
-  
+
     const [datePart, timePart] = startTime.split("T");
     const [year, month, day] = datePart.split("-").map(Number);
     const [hour, minute] = timePart.split(":").map(Number);
-  
+
     const start = new Date(year, month - 1, day, hour, minute);
     const end = new Date(start.getTime() + chargeTimeMinutes * 60000);
-  
+
     return end;
   };
-
 
   const formatLocalDateTime = (d) => {
     const pad = (n) => n.toString().padStart(2, "0");
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
   };
 
-
   const handleCreateReservation = () => {
+    setErrorMessage(null);
+
     if (!user?.id || !car || !station || !startTime) {
       alert("Choose car, station and time");
       return;
     }
 
     const end = calcEndTime();
+    if (!end) {
+      alert("Cannot calculate end time");
+      return;
+    }
+
+    const payload = {
+      user: { id: user.id },
+      station: { id: station.id },
+      startTime: startTime,
+      endTime: formatLocalDateTime(end),
+      status: "PENDING"
+    };
 
     fetch("http://localhost:8080/api/reservations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user: { id: user.id },
-        station: { id: station.id },
-        startTime: startTime,                
-        endTime: formatLocalDateTime(end),
-        status: "PENDING"
-      })
+      body: JSON.stringify(payload)
     })
       .then(res => {
-        if (!res.ok) throw new Error("Error!");
+        if (res.status === 409) {
+          throw new Error("This station is already reserved in this time range");
+        }
+        if (!res.ok) throw new Error("Error creating reservation");
         return res.json();
       })
       .then(data => {
-        alert("Reservation created");
-        console.log(data);
+        alert("Reservation created successfully");
+        console.log("Created reservation:", data);
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error(err.message);
+        setErrorMessage(err.message);
+      });
   };
-
 
   return (
     <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>
@@ -103,7 +114,7 @@ function Reservation({ selectedCarId, user }) {
       {!car && <p>Loading info about car...</p>}
 
       {car && (
-        <> 
+        <>
           <div style={{ marginTop: "10px" }}>
             <label>Charging start:</label>
             <input
@@ -112,6 +123,7 @@ function Reservation({ selectedCarId, user }) {
               onChange={e => setStartTime(e.target.value)}
             />
           </div>
+
           <div>
             <label>Choose station:</label>
             <select
@@ -131,9 +143,15 @@ function Reservation({ selectedCarId, user }) {
             Create reservation
           </button>
 
+          {errorMessage && (
+            <p style={{ color: "red", marginTop: "10px" }}>
+              {errorMessage}
+            </p>
+          )}
+
           {station && startTime && (
             <p style={{ marginTop: "10px" }}>
-              Estemited end including reserve time :{" "}
+              Estimated end including reserve time:{" "}
               {calcEndTime()?.toLocaleString()}
             </p>
           )}

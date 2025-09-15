@@ -59,7 +59,7 @@ function CarsPanel({ user }) {
 
       {/* Choose car */}
       <div>
-        <h4>Choose car</h4>
+        <h4>Choose car for reservation</h4>
         {cars.length === 0 && <p>You don't have a car yet.</p>}
         {cars.map(car => (
           <div key={car.id} style={{ marginBottom: "8px" }}>
@@ -73,6 +73,7 @@ function CarsPanel({ user }) {
               {car.spz} ({car.model}) — {car.batteryCapacityKwh} kWh
             </span>
             <button
+              className="button-delete"
               style={{ marginLeft: "12px" }}
               onClick={() => handleDeleteCar(car.id)}
             >
@@ -86,7 +87,7 @@ function CarsPanel({ user }) {
 
 
       {/* Add car*/}
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>
         <h4>Add new car</h4>
         <input
           type="text"
@@ -95,6 +96,7 @@ function CarsPanel({ user }) {
           onChange={e => setNewCarSpz(e.target.value)}
           required
         />
+        <br></br>
         <input
           type="text"
           placeholder="Car model"
@@ -102,6 +104,7 @@ function CarsPanel({ user }) {
           onChange={e => setNewCarModel(e.target.value)}
           required
         />
+        <br></br>
         <input
           type="number"
           placeholder="Battery capacity (kWh)"
@@ -109,14 +112,9 @@ function CarsPanel({ user }) {
           onChange={e => setNewCarBattery(e.target.value)}
           required
         />
-        <button onClick={handleAddCar}>Add</button>
+        <br></br>
+        <button className="button button-add" onClick={handleAddCar}>Add</button>
       </div>
-
-      {selectedCarId && (
-        <div style={{ marginTop: "20px" }}>
-          <strong>You choose car with ID: {selectedCarId}</strong>
-        </div>
-      )}
     </div>
   );
 }

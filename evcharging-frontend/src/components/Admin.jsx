@@ -20,10 +20,13 @@ function Admin({ user, allUsers, setAllUsers }) {
       return;
     }
   
+    // Přidáme validaci, aby power nikdy nebyla menší než 1
+    const powerValue = Math.max(1, parseInt(stationPower));
+  
     try {
       const newStation = {
         name: stationName,
-        powerKw: parseInt(stationPower),
+        powerKw: powerValue, // vždy >= 1
         active: true
       };
       await addChargingStation(newStation);
@@ -36,17 +39,19 @@ function Admin({ user, allUsers, setAllUsers }) {
   };
 
 
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">Admin panel – {user.username}</h1>
 
-      <h2 className="mt-6 text-xl font-semibold">All users:</h2>
+      <h3 style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }} 
+          className="mt-6 text-xl font-semibold">All users:</h3>
       <ul className="mt-2 list-disc list-inside">
         {allUsers.map((u) => (
           <li key={u.id}>
             {u.username} ({u.email}) – {u.role}
             <button
-              className="ml-2 text-red-500"
+              className="button-delete"
               onClick={() => handleDeleteUser(u.id)}
             >
               Delete
@@ -56,8 +61,8 @@ function Admin({ user, allUsers, setAllUsers }) {
       </ul>
 
       {/* add charging station */}
-      <div className="mt-6">
-        <h2 className="text-xl font-semibold">Add parking spot (charging station):</h2>
+      <div className="mt-6" style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>
+        <h3 className="text-xl font-semibold">Add parking spot (charging station):</h3>
         <div className="mt-2 flex gap-2">
           <input
             type="text"
@@ -66,16 +71,19 @@ function Admin({ user, allUsers, setAllUsers }) {
             onChange={(e) => setStationName(e.target.value)}
             className="border p-2 rounded"
           />
+          <br></br>
           <input
             type="number"
             placeholder="Power (kW)"
             value={stationPower}
             onChange={(e) => setStationPower(e.target.value)}
             className="border p-2 rounded w-32"
+            min={1}
           />
+          <br></br>
           <button
+            className="button button-add"
             onClick={handleAddStation}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
           >
             Add
           </button>

@@ -139,7 +139,7 @@ function Reservation({ selectedCarId, user }) {
             </select>
           </div>
 
-          <button style={{ marginTop: "10px" }} onClick={handleCreateReservation}>
+          <button className="button button-add" style={{ marginTop: "10px" }} onClick={handleCreateReservation}>
             Create reservation
           </button>
 

@@ -1,38 +1,181 @@
-.App {
+/* Globální nastavení */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(#e0f7fa, #e0f7fa); /* gradient z téže barvy */
+  margin: 0;
+  padding: 0;
+  color: #333;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+
+/* Hlavní kontejner se rámečkem */
+.app-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffffdd;
+  border: 2px solid #4ecdc4; /* rámeček */
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Header / welcome bar */
+.header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px 25px;
+  background-color: #ffffffcc;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Nadpis */
+.header h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* Všechna tlačítka */
+.button {
+  padding: 14px 28px; /* větší než předtím */
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+/* Logout tlačítko */
+.button-logout {
+  position: absolute; /* umístění relativně ke kontejneru */
+  top: 30px;
+  right: 30px;
+  background-color: #ff6b6b;
+  color: #fff;
+  padding: 14px 28px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button-logout:hover {
+  background-color: #ff4757;
+  transform: scale(1.05);
+}
+
+/* Add / action buttons */
+.button-add {
+  background-color: #4ecdc4;
+  color: #fff;
+}
+
+.button-add:hover {
+  background-color: #38b2a6;
+  transform: scale(1.05);
+}
+
+/* Delete button speciální */
+.button-delete {
+  background-color: #ff4757;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.button-delete:hover {
+  background-color: #e84118;
+  transform: scale(1.05);
+}
+
+/* Radio / checkbox buttons větší */
+input[type="radio"],
+input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  accent-color: #4ecdc4;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+/* Obsah panelu */
+.panel {
+  background-color: #ffffffdd;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+/* Form inputy */
+input, select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  width: 300px; /* užší než full-width */
+  box-sizing: border-box;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* Radio buttons label spacing */
+input[type="radio"] + span {
+  margin-left: 8px;
+}
+
+/* Admin a CarsPanel seznamy */
+ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+li {
+  margin-bottom: 12px;
+  font-weight: 500;
+  color: #34495e;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 12px;
 }
 
-.App-link {
-  color: #61dafb;
+/* Footer / drobné texty */
+.small-text {
+  font-size: 0.85rem;
+  color: #666;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+
+/* Login button */
+.button-login {
+  background-color: #1e90ff; /* jasně modrá */
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
+
+.button-login:hover {
+  background-color: #1c86ee; /* tmavší modrá při hover */
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+}
+

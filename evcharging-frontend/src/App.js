@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CarsPanel from "./components/CarsPanel";
 import Login from "./components/Login";
 import Admin from "./components/Admin";
+import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -23,13 +24,9 @@ function App() {
 
   if (user.role === "USER") {
     return (
-      <div className="p-6">
+      <div className="app-container">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Welcome, {user.username}</h2>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-          >
+          <button className="button-logout" onClick={handleLogout} >
             Logout
           </button>
         </div>
@@ -40,13 +37,9 @@ function App() {
 
   if (user.role === "ADMIN") {
     return (
-      <div className="p-6">
+      <div className="app-container">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Admin panel</h2>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-          >
+          <button className="button-logout" onClick={handleLogout} >
             Logout
           </button>
         </div>

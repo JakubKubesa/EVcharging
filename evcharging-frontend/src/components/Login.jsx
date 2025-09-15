@@ -54,7 +54,7 @@ function Login({ onLogin }) {
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             required
           />
-          <button className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition">
+          <button className="button-login">
             {isLogin ? "Login" : "Sign up"}
           </button>
         </form>

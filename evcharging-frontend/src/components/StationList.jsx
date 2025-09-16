@@ -34,15 +34,15 @@ export default function StationList() {
 
   return (
     <div>
-      <h2>Seznam nabíjecích stanic</h2>
+      <h2>Charging station list</h2>
       <table className="reservations-table">
         <thead>
           <tr>
             <th>ID</th>
-            <th>Název</th>
-            <th>Výkon (kW)</th>
-            <th>Aktivní</th>
-            <th>Akce</th>
+            <th>Name</th>
+            <th>Power (kW)</th>
+            <th>State</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -54,7 +54,7 @@ export default function StationList() {
               <td>{s.active ? "Ano" : "Ne"}</td>
               <td>
                 <button className="button-delete" onClick={() => handleDelete(s.id)}>
-                  Smazat
+                  Delete
                 </button>
               </td>
             </tr>

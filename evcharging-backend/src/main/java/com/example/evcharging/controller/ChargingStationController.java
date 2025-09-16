@@ -47,26 +47,6 @@ public class ChargingStationController {
         }
     }
 
-    @PostMapping("/api/reservations")
-    public ResponseEntity<?> createReservation(@RequestBody Reservation reservation) {
-
-        List<Reservation> overlapping = reservationRepository.findOverlappingReservations(
-                reservation.getStation().getId(),
-                reservation.getStartTime(),
-                reservation.getEndTime()
-        );
-
-        if (!overlapping.isEmpty()) {
-            // log do konzole
-            System.out.println("Reservation conflict: overlaps with existing reservation(s)");
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Station is already reserved in this time range");
-        }
-
-        Reservation saved = reservationRepository.save(reservation);
-        return ResponseEntity.ok(saved);
-    }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteStation(@PathVariable Long id) {

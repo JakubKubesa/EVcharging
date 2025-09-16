@@ -53,19 +53,19 @@ export default function ReservationList() {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Seznam rezervací</h2>
+      <h2 className="text-xl font-bold mb-4">Reservation list</h2>
       {reservations.length === 0 ? (
-        <p>Žádné rezervace</p>
+        <p>Zero reservations</p>
       ) : (
         <table className="reservations-table">
           <thead>
             <tr className="bg-gray-100">
               <th className="border p-2">ID</th>
-              <th className="border p-2">Stanice</th>
-              <th className="border p-2">Začátek</th>
-              <th className="border p-2">Konec</th>
-              <th className="border p-2">Status</th>
-              <th className="border p-2">Akce</th>
+              <th className="border p-2">Charging station</th>
+              <th className="border p-2">Start</th>
+              <th className="border p-2">End</th>
+              <th className="border p-2">State</th>
+              <th className="border p-2">Action</th>
             </tr>
           </thead>
           <tbody>

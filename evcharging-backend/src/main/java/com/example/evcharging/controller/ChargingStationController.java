@@ -67,4 +67,25 @@ public class ChargingStationController {
         return ResponseEntity.ok(saved);
     }
 
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteStation(@PathVariable Long id) {
+        if (!stationRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Station not found");
+        }
+
+        // Smazat všechny rezervace pro tuto stanici
+        reservationRepository.deleteAll(
+                reservationRepository.findByStationId(id)
+        );
+
+        // Smazat samotnou stanici
+        stationRepository.deleteById(id);
+
+        return ResponseEntity.ok("Station and related reservations deleted successfully");
+    }
+
+
+
 }

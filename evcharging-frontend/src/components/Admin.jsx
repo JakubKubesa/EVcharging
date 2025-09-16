@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { deleteUser, addChargingStation } from "../services/api";
+import StationList from "./StationList";
 
 function Admin({ user, allUsers, setAllUsers }) {
   const [stationName, setStationName] = useState("");
@@ -89,6 +90,7 @@ function Admin({ user, allUsers, setAllUsers }) {
           </button>
         </div>
       </div>
+      <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}><StationList></StationList></div>
     </div>
   );
 }

@@ -67,12 +67,12 @@ body {
 
 /* Add / action buttons */
 .button-add {
-  background-color: #4ecdc4;
+  background-color: #4ecd92;
   color: #fff;
 }
 
 .button-add:hover {
-  background-color: #38b2a6;
+  background-color: #38b294;
   transform: scale(1.05);
 }
 
@@ -96,7 +96,7 @@ input[type="radio"],
 input[type="checkbox"] {
   width: 22px;
   height: 22px;
-  accent-color: #4ecdc4;
+  accent-color: #4ecd98;
   cursor: pointer;
   margin-right: 10px;
 }

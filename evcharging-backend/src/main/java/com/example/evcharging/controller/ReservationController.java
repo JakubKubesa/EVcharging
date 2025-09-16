@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -21,6 +22,15 @@ public class ReservationController {
     @GetMapping
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getReservationById(@PathVariable Long id) {
+        Optional<Reservation> reservation = reservationRepository.findById(id);
+        return reservation
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Reservation not found"));
     }
 
     @PostMapping
@@ -39,5 +49,15 @@ public class ReservationController {
 
         Reservation saved = reservationRepository.save(reservation);
         return ResponseEntity.ok(saved);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
+        if (!reservationRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Reservation not found");
+        }
+        reservationRepository.deleteById(id);
+        return ResponseEntity.ok("Reservation deleted successfully");
     }
 }

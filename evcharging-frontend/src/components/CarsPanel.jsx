@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Reservation from "./Reservation";
+import CreateReservation from "./CreateReservation";
+import ReservationList from "./ReservationList";
 
 function CarsPanel({ user }) {
   const [cars, setCars] = useState([]);
@@ -82,9 +83,9 @@ function CarsPanel({ user }) {
           </div>
         ))}
 
-        {selectedCarId && <Reservation selectedCarId={selectedCarId} user={user} />}
+        {selectedCarId && <CreateReservation selectedCarId={selectedCarId} user={user} />}
       </div>
-
+      <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}><ReservationList></ReservationList></div>
 
       {/* Add car*/}
       <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>

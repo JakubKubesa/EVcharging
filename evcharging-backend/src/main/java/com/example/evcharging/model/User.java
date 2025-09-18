@@ -2,6 +2,8 @@ package com.example.evcharging.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -20,6 +22,9 @@ public class User {
     public enum Role {
         USER, ADMIN
     }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Reservation> reservations;
 
     public User() {}
 

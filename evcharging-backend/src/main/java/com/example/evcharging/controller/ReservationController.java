@@ -66,4 +66,15 @@ public class ReservationController {
         Reservation saved = reservationRepository.save(reservation);
         return ResponseEntity.ok(saved);
     }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
+        if (!reservationRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        reservationRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

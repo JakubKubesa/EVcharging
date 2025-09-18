@@ -20,14 +20,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(csrf -> csrf.disable()) // Důležité pro vývoj
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // POVOL OPTIONS REQUESTY PRO CORS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // POVOL VŠECHNY API ENDPOINTY
                         .requestMatchers("/api/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 );
+
 
         return http.build();
     }

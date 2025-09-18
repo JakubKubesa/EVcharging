@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -20,18 +22,32 @@ public class ReservationController {
     }
 
     @GetMapping
-    public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
+    public List<Map<String, Object>> getReservations(@RequestParam(required = false) Long userId) {
+        List<Reservation> reservations = (userId != null)
+                ? reservationRepository.findByUserId(userId)
+                : reservationRepository.findAll();
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Reservation r : reservations) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", r.getId());
+            map.put("userId", r.getUser().getId());
+
+            Map<String, Object> stationMap = new HashMap<>();
+            stationMap.put("id", r.getStation().getId());
+            stationMap.put("name", r.getStation().getName());
+            map.put("station", stationMap);
+
+            map.put("startTime", r.getStartTime());
+            map.put("endTime", r.getEndTime());
+            map.put("status", r.getStatus().name());
+            result.add(map);
+        }
+        return result;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getReservationById(@PathVariable Long id) {
-        Optional<Reservation> reservation = reservationRepository.findById(id);
-        return reservation
-                .<ResponseEntity<?>>map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Reservation not found"));
-    }
+
+
 
     @PostMapping
     public ResponseEntity<?> createReservation(@RequestBody Reservation reservation) {
@@ -49,15 +65,5 @@ public class ReservationController {
 
         Reservation saved = reservationRepository.save(reservation);
         return ResponseEntity.ok(saved);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
-        if (!reservationRepository.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Reservation not found");
-        }
-        reservationRepository.deleteById(id);
-        return ResponseEntity.ok("Reservation deleted successfully");
     }
 }

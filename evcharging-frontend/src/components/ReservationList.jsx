@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 
-export default function ReservationList() {
+export default function ReservationList({ user }) {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetchReservations = async () => {
+    if (!user?.id) return;
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:8080/api/reservations", {
+      const res = await fetch(`http://localhost:8080/api/reservations?userId=${user.id}`, {
         headers: { Accept: "application/json" },
       });
       if (!res.ok) {
@@ -25,6 +26,12 @@ export default function ReservationList() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!user?.id) return;
+    fetchReservations();
+  }, [user]);
+
 
   const deleteReservation = async (id) => {
     if (!window.confirm("Opravdu chcete smazat tuto rezervaci?")) return;
@@ -44,10 +51,6 @@ export default function ReservationList() {
     }
   };
 
-  useEffect(() => {
-    fetchReservations();
-  }, []);
-
   if (loading) return <p>Načítání...</p>;
   if (error) return <p style={{ color: "red" }}>Chyba: {error}</p>;
 
@@ -55,7 +58,7 @@ export default function ReservationList() {
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Reservation list</h2>
       {reservations.length === 0 ? (
-        <p>Zero reservations</p>
+        <p>Žádné rezervace</p>
       ) : (
         <table className="reservations-table">
           <thead>
@@ -72,14 +75,14 @@ export default function ReservationList() {
             {reservations.map((r) => (
               <tr key={r.id}>
                 <td className="border p-2">{r.id}</td>
-                <td>{r.station?.name || "—"}</td>
+                <td className="border p-2">{r.station?.name || "—"}</td>
                 <td className="border p-2">
-                  {new Date(r.startTime).toLocaleString()}
+                  {r.startTime ? new Date(r.startTime).toLocaleString() : "—"}
                 </td>
                 <td className="border p-2">
-                  {new Date(r.endTime).toLocaleString()}
+                  {r.endTime ? new Date(r.endTime).toLocaleString() : "—"}
                 </td>
-                <td className="border p-2">{r.status}</td>
+                <td className="border p-2">{r.status || "—"}</td>
                 <td className="border p-2 text-center">
                   <button onClick={() => deleteReservation(r.id)} className="button-delete">Delete</button>
                 </td>

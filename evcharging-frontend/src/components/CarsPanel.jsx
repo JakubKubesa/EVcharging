@@ -85,7 +85,10 @@ function CarsPanel({ user }) {
 
         {selectedCarId && <CreateReservation selectedCarId={selectedCarId} user={user} />}
       </div>
-      <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}><ReservationList></ReservationList></div>
+      
+      <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>
+        <ReservationList user={user} />
+      </div>
 
       {/* Add car*/}
       <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>

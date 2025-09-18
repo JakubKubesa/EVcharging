@@ -7,7 +7,8 @@ function CarsPanel({ user }) {
   const [selectedCarId, setSelectedCarId] = useState(null);
   const [newCarSpz, setNewCarSpz] = useState("");
   const [newCarBattery, setNewCarBattery] = useState("");
-  const [newCarModel, setNewCarModel] = useState(""); 
+  const [newCarModel, setNewCarModel] = useState("");
+  const [reservationRefresh, setReservationRefresh] = useState(0); 
 
   // load car for user
   useEffect(() => {
@@ -83,11 +84,17 @@ function CarsPanel({ user }) {
           </div>
         ))}
 
-        {selectedCarId && <CreateReservation selectedCarId={selectedCarId} user={user} />}
+        {selectedCarId && (
+          <CreateReservation
+            selectedCarId={selectedCarId}
+            user={user}
+            onCreated={() => setReservationRefresh(prev => prev + 1)}
+          />
+        )}
       </div>
       
       <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>
-        <ReservationList user={user} />
+        <ReservationList user={user} refreshTrigger={reservationRefresh}/>
       </div>
 
       {/* Add car*/}

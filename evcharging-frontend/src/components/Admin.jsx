@@ -5,6 +5,7 @@ import StationList from "./StationList";
 function Admin({ user, allUsers, setAllUsers }) {
   const [stationName, setStationName] = useState("");
   const [stationPower, setStationPower] = useState("");
+  const [refreshCounter, setRefreshCounter] = useState(0);
 
   const handleDeleteUser = async (id) => {
     try {
@@ -20,20 +21,21 @@ function Admin({ user, allUsers, setAllUsers }) {
       alert("Please fill in all required fields");
       return;
     }
-  
-    // Přidáme validaci, aby power nikdy nebyla menší než 1
+
     const powerValue = Math.max(1, parseInt(stationPower));
-  
+
     try {
       const newStation = {
         name: stationName,
-        powerKw: powerValue, // vždy >= 1
+        powerKw: powerValue,
         active: true
       };
       await addChargingStation(newStation);
       alert("charging station added successfully");
       setStationName("");
       setStationPower("");
+
+      setRefreshCounter(prev => prev + 1); 
     } catch (err) {
       console.error("error when adding charging station:", err);
     }
@@ -90,7 +92,9 @@ function Admin({ user, allUsers, setAllUsers }) {
           </button>
         </div>
       </div>
-      <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}><StationList></StationList></div>
+      <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>
+        <StationList refreshTrigger={refreshCounter} />
+      </div>    
     </div>
   );
 }

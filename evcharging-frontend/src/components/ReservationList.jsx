@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function ReservationList({ user }) {
+export default function ReservationList({ user , refreshTrigger }) {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,15 +30,18 @@ export default function ReservationList({ user }) {
   useEffect(() => {
     if (!user?.id) return;
     fetchReservations();
-  }, [user]);
+  }, [user, refreshTrigger]);
 
 
   const deleteReservation = async (id) => {
-    if (!window.confirm("Opravdu chcete smazat tuto rezervaci?")) return;
+    if (!window.confirm("Are you sure?")) return;
 
     try {
       const res = await fetch(`http://localhost:8080/api/reservations/${id}`, {
         method: "DELETE",
+        headers: {
+          Accept: "application/json",
+        },
       });
       if (!res.ok) {
         const text = await res.text();

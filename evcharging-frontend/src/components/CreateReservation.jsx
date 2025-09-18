@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function Reservation({ selectedCarId, user }) {
+function Reservation({ selectedCarId, user, onCreated }) {
   const [stations, setStations] = useState([]);
   const [selectedStationId, setSelectedStationId] = useState(null);
   const [startTime, setStartTime] = useState("");
@@ -100,6 +100,7 @@ function Reservation({ selectedCarId, user }) {
       .then(data => {
         alert("Reservation created successfully");
         console.log("Created reservation:", data);
+        if (onCreated) onCreated();  
       })
       .catch(err => {
         console.error(err.message);

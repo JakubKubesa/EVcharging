@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-export default function StationList() {
+export default function StationList({ refreshTrigger }) {
   const [stations, setStations] = useState([]);
 
   useEffect(() => {
     fetchStations();
-  }, []);
+  }, [refreshTrigger]);
 
   const fetchStations = async () => {
     try {
@@ -19,8 +19,7 @@ export default function StationList() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Opravdu chcete smazat tuto stanici včetně jejích rezervací?")) return;
-
+    if (!window.confirm("Are you sure you want to delete this station including its reservations?")) return;
     try {
       const res = await fetch(`http://localhost:8080/api/stations/${id}`, {
         method: "DELETE",

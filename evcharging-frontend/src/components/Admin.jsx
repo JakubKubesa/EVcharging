@@ -9,12 +9,13 @@ function Admin({ user, allUsers, setAllUsers }) {
 
   const handleDeleteUser = async (id) => {
     try {
-      await deleteUser(id);
+      await deleteUser(id, user.id); // user.id je aktuálně přihlášený admin
       setAllUsers(allUsers.filter((u) => u.id !== id));
     } catch (err) {
       console.error("Delete user error:", err);
     }
   };
+
 
   const handleAddStation = async () => {
     if (!stationName || !stationPower) {

@@ -45,8 +45,8 @@ export const getUsers = async () => {
 };
 
 
-export const deleteUser = async (userId) => {
-  const response = await fetch(`${USERS_URL}/${userId}`, {
+export const deleteUser = async (userId, requesterId) => {
+  const response = await fetch(`${USERS_URL}/${userId}?requesterId=${requesterId}`, {
     method: "DELETE",
     credentials: "include",
   });
@@ -55,6 +55,7 @@ export const deleteUser = async (userId) => {
     throw new Error("Delete user error");
   }
 };
+
 
 // --- Stations ---
 export const getStations = async () => {

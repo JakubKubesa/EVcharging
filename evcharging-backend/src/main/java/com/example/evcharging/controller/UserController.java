@@ -34,9 +34,17 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable Long id, @RequestParam Long requesterId) {
+        if (id.equals(requesterId)) {
+            throw new RuntimeException("Cannot delete yourself");
+        }
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if ("ADMIN".equals(user.getRole())) {
+            throw new RuntimeException("Cannot delete another admin");
+        }
 
         // delete user cars
         carRepository.deleteAllByUser(user);
@@ -44,4 +52,5 @@ public class UserController {
         // delete user
         userRepository.delete(user);
     }
+
 }

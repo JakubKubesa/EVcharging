@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { getStations, deleteStation } from "../services/api";
 
 export default function StationList({ refreshTrigger }) {
   const [stations, setStations] = useState([]);
@@ -9,27 +10,23 @@ export default function StationList({ refreshTrigger }) {
 
   const fetchStations = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/stations");
-      if (!res.ok) throw new Error("Chyba při načítání stanic");
-      const data = await res.json();
+      const data = await getStations();
       setStations(data);
     } catch (err) {
       console.error(err);
     }
   };
-
+  
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this station including its reservations?")) return;
     try {
-      const res = await fetch(`http://localhost:8080/api/stations/${id}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) throw new Error("Chyba při mazání stanice");
+      await deleteStation(id);
       setStations((prev) => prev.filter((s) => s.id !== id));
     } catch (err) {
       console.error(err);
     }
   };
+
 
   return (
     <div>

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CreateReservation from "./CreateReservation";
 import ReservationList from "./ReservationList";
+import { getCarsForUser, addCar, deleteCar } from "../services/api";
+
 
 function CarsPanel({ user }) {
   const [cars, setCars] = useState([]);
@@ -13,47 +15,41 @@ function CarsPanel({ user }) {
   // load car for user
   useEffect(() => {
     if (user?.id) {
-      fetch(`http://localhost:8080/api/cars/user/${user.id}`)
-        .then(res => res.json())
-        .then(data => setCars(data))
+      getCarsForUser(user.id)
+        .then(setCars)
         .catch(err => console.error("Loading car error:", err));
     }
   }, [user]);
+
 
   // add car
   const handleAddCar = () => {
     if (!newCarSpz || !newCarBattery || !newCarModel) return;
 
-    fetch(`http://localhost:8080/api/cars/add/${user.id}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        spz: newCarSpz,
-        batteryCapacityKwh: parseInt(newCarBattery),
-        model: newCarModel
-      })
-    })
-      .then(res => {
-        if (!res.ok) throw new Error("Adding car error");
-        return res.json();
-      })
+    const carData = {
+      spz: newCarSpz,
+      batteryCapacityKwh: parseInt(newCarBattery),
+      model: newCarModel
+    };
+
+    addCar(user.id, carData)
       .then(car => {
         setCars([...cars, car]);
         setNewCarSpz("");
         setNewCarBattery("");
         setNewCarModel("");
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error("Add car error:", err));
   };
+
 
   // delete car
   const handleDeleteCar = (carId) => {
-    fetch(`http://localhost:8080/api/cars/${carId}`, {
-      method: "DELETE"
-    })
+    deleteCar(carId)
       .then(() => setCars(cars.filter(car => car.id !== carId)))
       .catch(err => console.error("Delete car error:", err));
   };
+
 
   return (
     <div>

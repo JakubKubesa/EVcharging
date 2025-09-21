@@ -1,11 +1,12 @@
-const API_URL = "http://localhost:8080/api/auth";
+const LOGIN_URL = "http://localhost:8080/api/auth";
 const USERS_URL = "http://localhost:8080/api/users";
 const CAR_URL = "http://localhost:8080/api/cars";
 const STATIONS_URL = "http://localhost:8080/api/stations";
+const RESERVATIONS_URL = "http://localhost:8080/api/reservations";
 
-
+// --- User and Login ---
 export const registerUser = async (user) => {
-  const response = await fetch("http://localhost:8080/api/auth/register", {
+  const response = await fetch(`${LOGIN_URL}/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -22,7 +23,7 @@ export const registerUser = async (user) => {
 
 
 export async function loginUser(credentials) {
-  const response = await fetch(`${API_URL}/login`, {
+  const response = await fetch(`${LOGIN_URL}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -55,7 +56,12 @@ export const deleteUser = async (userId) => {
   }
 };
 
-//---
+// --- Stations ---
+export const getStations = async () => {
+  const response = await fetch(STATIONS_URL);
+  if (!response.ok) throw new Error("Error fetching stations");
+  return response.json();
+};
 
 export const addChargingStation = async (station) => {
   const response = await fetch(STATIONS_URL, {
@@ -75,8 +81,14 @@ export const addChargingStation = async (station) => {
   return await response.json();
 };
 
-//---
+export const deleteStation = async (stationId) => {
+  const response = await fetch(`${STATIONS_URL}/${stationId}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) throw new Error("Delete station error");
+};
 
+// --- Cars ---
 export const addCar = async (userId, car) => {
   const response = await fetch(`${CAR_URL}/add/${userId}`, {
     method: "POST",
@@ -94,3 +106,55 @@ export const getCarsForUser = async (userId) => {
 export const deleteCar = async (carId) => {
   await fetch(`${CAR_URL}/${carId}`, { method: "DELETE" });
 };
+
+// --- Reservations ---
+export const getAvailableStations = async (startTime) => {
+  const response = await fetch(`${STATIONS_URL}/available?startTime=${encodeURIComponent(startTime)}`);
+  if (!response.ok) throw new Error("Error fetching available stations");
+  return response.json();
+};
+
+export const getCarById = async (carId) => {
+  const response = await fetch(`${CAR_URL}/${carId}`);
+  if (!response.ok) throw new Error("Error fetching car by ID");
+  return response.json();
+};
+
+export const createReservation = async (payload) => {
+  const response = await fetch(RESERVATIONS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (response.status === 409) {
+    throw new Error("This station is already reserved in this time range");
+  }
+  if (!response.ok) throw new Error("Error creating reservation");
+
+  return response.json();
+};
+
+export async function getReservationsByUser(userId) {
+  const res = await fetch(`${RESERVATIONS_URL}?userId=${userId}`, {
+    headers: { Accept: "application/json" },
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Chyba ${res.status}: ${text}`);
+  }
+  return res.json();
+}
+
+export async function deleteReservationById(id) {
+  const res = await fetch(`${RESERVATIONS_URL}/${id}`, {
+    method: "DELETE",
+    headers: { Accept: "application/json" },
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Chyba ${res.status}: ${text}`);
+  }
+  return true;
+}
+

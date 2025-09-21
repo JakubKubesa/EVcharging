@@ -55,12 +55,10 @@ public class ChargingStationController {
                     .body("Station not found");
         }
 
-        // Smazat všechny rezervace pro tuto stanici
         reservationRepository.deleteAll(
                 reservationRepository.findByStationId(id)
         );
 
-        // Smazat samotnou stanici
         stationRepository.deleteById(id);
 
         return ResponseEntity.ok("Station and related reservations deleted successfully");

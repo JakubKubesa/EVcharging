@@ -24,7 +24,6 @@ public class CarController {
 
     // add car to user
     @PostMapping("/add/{userId}")
-    @CrossOrigin(origins = "http://localhost:3000")
     public Car addCar(@PathVariable Long userId, @RequestBody CarRequest carRequest) {
         System.out.println("Received car request: " + carRequest.getSpz() + ", "
                 + carRequest.getBatteryCapacityKwh() + ", " + carRequest.getModel());
@@ -48,7 +47,6 @@ public class CarController {
 
     // get car by id
     @GetMapping("/{carId}")
-    @CrossOrigin(origins = "http://localhost:3000")
     public Car getCarById(@PathVariable Long carId) {
         return carRepository.findById(carId)
                 .orElseThrow(() -> new RuntimeException("Car not found"));
@@ -57,14 +55,12 @@ public class CarController {
 
     // get all cars from the user
     @GetMapping("/user/{userId}")
-    @CrossOrigin(origins = "http://localhost:3000")
     public List<Car> getCarsForUser(@PathVariable Long userId) {
         return carRepository.findByUserId(userId);
     }
 
     // delete car
     @DeleteMapping("/{carId}")
-    @CrossOrigin(origins = "http://localhost:3000")
     public void deleteCar(@PathVariable Long carId) {
         carRepository.deleteById(carId);
     }

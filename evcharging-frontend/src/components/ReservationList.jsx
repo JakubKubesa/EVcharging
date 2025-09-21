@@ -1,53 +1,34 @@
 import { useEffect, useState } from "react";
+import { getReservationsByUser, deleteReservationById } from "../services/api";
 
 export default function ReservationList({ user , refreshTrigger }) {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchReservations = async () => {
-    if (!user?.id) return;
-    try {
-      setLoading(true);
-      const res = await fetch(`http://localhost:8080/api/reservations?userId=${user.id}`, {
-        headers: { Accept: "application/json" },
-      });
-      if (!res.ok) {
-        const text = await res.text();
-        console.error("Server error response:", text);
-        throw new Error(`Chyba ${res.status}: ${text}`);
-      }
-      const data = await res.json();
-      setReservations(data);
-    } catch (err) {
-      console.error(err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Reservation by user id
   useEffect(() => {
     if (!user?.id) return;
+    const fetchReservations = async () => {
+      try {
+        setLoading(true);
+        const data = await getReservationsByUser(user.id);
+        setReservations(data);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchReservations();
   }, [user, refreshTrigger]);
 
-
-  const deleteReservation = async (id) => {
+  // delete reservation by id
+  const handleDeleteReservation = async (id) => {
     if (!window.confirm("Are you sure?")) return;
-
     try {
-      const res = await fetch(`http://localhost:8080/api/reservations/${id}`, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-        },
-      });
-      if (!res.ok) {
-        const text = await res.text();
-        console.error("Delete error response:", text);
-        throw new Error(`Chyba ${res.status}: ${text}`);
-      }
+      await deleteReservationById(id);
       setReservations((prev) => prev.filter((r) => r.id !== id));
     } catch (err) {
       alert(err.message);
@@ -87,7 +68,7 @@ export default function ReservationList({ user , refreshTrigger }) {
                 </td>
                 <td className="border p-2">{r.status || "—"}</td>
                 <td className="border p-2 text-center">
-                  <button onClick={() => deleteReservation(r.id)} className="button-delete">Delete</button>
+                  <button onClick={() => handleDeleteReservation(r.id)} className="button-delete">Delete</button>
                 </td>
               </tr>
             ))}

@@ -7,16 +7,17 @@ function Admin({ user, allUsers, setAllUsers }) {
   const [stationPower, setStationPower] = useState("");
   const [refreshCounter, setRefreshCounter] = useState(0);
 
+  // delete user (for admin)
   const handleDeleteUser = async (id) => {
     try {
-      await deleteUser(id, user.id); // user.id je aktuálně přihlášený admin
+      await deleteUser(id, user.id);
       setAllUsers(allUsers.filter((u) => u.id !== id));
     } catch (err) {
       console.error("Delete user error:", err);
     }
   };
 
-
+  // add park spot charging station
   const handleAddStation = async () => {
     if (!stationName || !stationPower) {
       alert("Please fill in all required fields");

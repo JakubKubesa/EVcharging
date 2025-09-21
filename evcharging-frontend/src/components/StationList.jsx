@@ -8,6 +8,7 @@ export default function StationList({ refreshTrigger }) {
     fetchStations();
   }, [refreshTrigger]);
 
+  //show charging stations
   const fetchStations = async () => {
     try {
       const data = await getStations();
@@ -17,6 +18,7 @@ export default function StationList({ refreshTrigger }) {
     }
   };
   
+  //delete charging station
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this station including its reservations?")) return;
     try {
